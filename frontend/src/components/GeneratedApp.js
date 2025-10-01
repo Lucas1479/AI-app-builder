@@ -17,6 +17,7 @@ const GeneratedApp = ({ requirement }) => {
   const [selectedEntity, setSelectedEntity] = useState(null);
   const [mockData, setMockData] = useState({});
   const [showSuccess, setShowSuccess] = useState(true);
+  const [expanded, setExpanded] = useState({}); // view-only entities collapsed by default
 
   useEffect(() => {
     setShowSuccess(true);
@@ -126,13 +127,44 @@ const GeneratedApp = ({ requirement }) => {
 
   const renderEntityList = (entity) => {
     const data = mockData[entity.name] || [];
+    // Generate simple placeholder rows when no data yet
+    const getSampleValue = (field) => {
+      const t = String(field.type || 'text').toLowerCase();
+      switch (t) {
+        case 'email':
+          return 'user@example.com';
+        case 'number':
+          return 0;
+        case 'date':
+          return new Date().toISOString().slice(0, 10);
+        case 'select':
+          return 'Sample';
+        case 'textarea':
+          return 'Lorem ipsum';
+        default:
+          return 'Sample';
+      }
+    };
+    const placeholderRows = Array.from({ length: 1 }).map(() => {
+      const row = {};
+      (entity.fields || []).forEach((f) => {
+        row[f.name] = getSampleValue(f);
+      });
+      return row;
+    });
     
-    // Check if current role can create this entity
+    // Check if current role can create/edit this entity
     const roleKey = activeTab.charAt(0).toUpperCase() + activeTab.slice(1).toLowerCase();
     const canCreate = requirement.rolePermissions && requirement.rolePermissions[roleKey] 
       ? requirement.rolePermissions[roleKey].canCreate || []
       : [];
     const canCreateEntity = canCreate.includes(entity.name);
+    const canEditList = requirement.rolePermissions && requirement.rolePermissions[roleKey]
+      ? requirement.rolePermissions[roleKey].canEdit || []
+      : [];
+    const canEditEntity = canEditList.includes(entity.name);
+    const viewOnly = !canCreateEntity && !canEditEntity;
+    const isPlaceholder = data.length === 0;
     
     return (
       <div className="space-y-4">
@@ -140,7 +172,21 @@ const GeneratedApp = ({ requirement }) => {
           <h4 className="text-base font-medium text-gray-900">
             {entity.name}s ({data.length})
           </h4>
-          {canCreateEntity && (
+          <div className="flex items-center space-x-3">
+            {viewOnly && (
+              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium bg-gray-100 text-gray-500 border border-gray-200">
+                View only
+              </span>
+            )}
+            {viewOnly && (
+              <button
+                onClick={() => setExpanded(prev => ({ ...prev, [entity.name]: !prev[entity.name] }))}
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                {expanded[entity.name] ? 'Collapse' : 'Review more'}
+              </button>
+            )}
+            {canCreateEntity && (
             <button
               onClick={() => handleAddEntity(entity)}
               className="btn-primary flex items-center space-x-1.5 text-sm px-3 py-1.5"
@@ -148,34 +194,31 @@ const GeneratedApp = ({ requirement }) => {
               <PlusIcon className="w-3 h-3" />
               <span>Add {entity.name}</span>
             </button>
-          )}
-        </div>
-        
-        {data.length > 0 ? (
-          <div className="space-y-2">
-            {data.map((item, index) => (
-              <div key={index} className="bg-gray-50 p-2.5 rounded-lg">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    {entity.fields.map((field) => (
-                      <div key={field.name} className="text-xs">
-                        <span className="font-medium text-gray-700">{field.name}:</span>
-                        <span className="ml-2 text-gray-600">{item[field.name] || 'N/A'}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <EyeIcon className="w-3 h-3" />
-                  </button>
-                </div>
-              </div>
-            ))}
+            )}
           </div>
-        ) : (
-          <div className="text-center py-6 text-gray-500">
-            <DocumentTextIcon className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-            <p className="text-sm">No {entity.name.toLowerCase()}s added yet</p>
-            <p className="text-xs">Click "Add {entity.name}" to get started</p>
+        </div>
+        {/* Table preview (read-only). Show real data if present, otherwise placeholder rows */}
+        {/* Table preview (read-only). Show real data if present, otherwise one placeholder row (muted). */}
+        {(!viewOnly || expanded[entity.name] || data.length > 0) && (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left text-xs">
+              <thead>
+                <tr className="text-gray-600">
+                  {(entity.fields || []).slice(0, 4).map((field) => (
+                    <th key={field.name} className="py-2 pr-4 font-medium">{String(field.name).charAt(0).toUpperCase() + String(field.name).slice(1)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className={isPlaceholder ? 'text-gray-400' : ''}>
+                {(data.length > 0 ? data : placeholderRows).map((item, idx) => (
+                  <tr key={idx} className="border-t border-gray-100">
+                    {(entity.fields || []).slice(0, 4).map((field) => (
+                      <td key={field.name} className="py-2 pr-4">{item[field.name] ?? '—'}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
