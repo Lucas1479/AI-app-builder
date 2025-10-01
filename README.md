@@ -1,38 +1,49 @@
-## Mini AI App Builder Portal (Demo)
+## Concept Canvas
 
-A small demo that captures a user's app idea, extracts structured requirements using an AI API (or a built-in mock), and renders a simple generated UI (forms/menus) based on those requirements.
+An AI-powered app prototype generator that transforms natural language descriptions into structured requirements and interactive mock UIs. Users describe their app idea, and the system generates a complete interface with role-based access control, dynamic forms, and navigation.
 
-- **Tech stack**: React (frontend) + Node.js/Express (backend) + MongoDB (Atlas) + optional Google Generative AI (Gemini)
-- **Deployment**: Works locally or on Render (Static Site for frontend + Web Service for backend)
+- **Tech Stack**: React, Node.js, Express, MongoDB, Google Gemini AI
+- **Deployment**: Local development or cloud hosting (Render recommended)
 
 ---
 
 ## Features
-- **Requirement Capture**
-  - A text input for the user to describe the app idea
-  - Submit to backend for AI-driven extraction (falls back to mock if AI key is not set)
-  - Extracted structure includes: `appName`, `entities`, `roles`, `features`, `rolePermissions`
-- **Generated UI (Mock)**
-  - Auto-generate basic forms for entities with common field types (text/email/number/date/select/textarea)
-  - Simple navigation for roles/features (tabs/menus)
-  - Demo-only; not intended for full CRUD or real auth
-- **Health & Status**
-  - `GET /api/health` for service health
-  - `GET /api/apps/ai-status` to check whether real AI is configured
+
+### AI-Powered Requirement Analysis
+- Natural language processing to extract structured app requirements
+- Automatic entity, role, and permission identification
+- Fallback to mock data when AI services are unavailable
+
+### Dynamic UI Generation
+- Role-based interface generation with appropriate permissions
+- Interactive forms with multiple field types (text, email, number, date, select, textarea)
+- Responsive design for desktop and mobile devices
+- Real-time form validation and submission
+
+### Permission Management
+- Granular role-based access control (canCreate, canView, canEdit)
+- Automatic permission validation and fallback mechanisms
+- Visual permission overview for each role
 
 ---
 
-## Project Structure (Brief)
-- `frontend/` React client
-  - Uses `REACT_APP_API_URL` to reach backend `/api`
-- `backend/` Node/Express API
-  - Routes prefixed by `/api/apps`
-  - Reads `GEMINI_API_KEY` for Google Generative AI; if not provided, uses a mock extractor
-  - Persists requirements and AI output to MongoDB via `MONGODB_URI`
+## Architecture
+
+### Frontend (`/frontend`)
+- React application with modern hooks and state management
+- Tailwind CSS for responsive styling
+- Component-based architecture with reusable UI elements
+- Real-time polling for AI processing status
+
+### Backend (`/backend`)
+- Express.js REST API with structured error handling
+- MongoDB integration for data persistence
+- Google Gemini AI integration with structured output
+- Comprehensive validation and fallback mechanisms
 
 ---
 
-## Environment Setup
+## Environment Configuration
 
 Create environment files (do not commit real secrets):
 
@@ -62,7 +73,7 @@ Notes:
 
 ---
 
-## Run Locally
+## Local Development
 
 1) Install dependencies
 ```bash
@@ -88,7 +99,7 @@ If `GEMINI_API_KEY` is not set, backend will use the built-in mock to return exa
 
 ---
 
-## Deploy on Render (Suggested)
+## Deployment
 
 - Backend (Web Service)
   - Root: `backend/`
@@ -113,7 +124,7 @@ Verification:
 
 ---
 
-## Backend API (Selected)
+## API Reference
 - `POST /api/apps/requirements` — submit requirement
   - body: `{ "userDescription": string }`
 - `GET /api/apps/requirements/:id` — fetch a requirement with extracted data
@@ -123,14 +134,22 @@ Verification:
 
 ---
 
-## Alignment with Expected Capabilities
-- **Code structure**: Clear separation of concerns (frontend, backend, services, routes, models)
-- **AI integration**: Google Gemini via `GEMINI_API_KEY`; mock fallback ensures the demo runs without a key
-- **Dynamic UI generation**: Forms and basic menus generated from extracted `entities`, `fields`, and `rolePermissions`
-- **Usability**: Clean, simple navigation; loading/error states; consistent API responses
-- **Deliverables**: Running app (local or hosted), public repository, and this README with setup steps
+## Security & Best Practices
 
----
+- Environment variables for all sensitive configuration
+- Input validation and sanitization
+- CORS configuration for cross-origin requests
+- Error handling with fallback mechanisms
+- No hardcoded secrets or API keys
 
-## Disclaimer
-This repository is a demo to illustrate architecture and capability. Do not store or commit any secrets in the codebase. Use environment variables on your hosting provider for production.
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).

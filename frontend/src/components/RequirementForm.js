@@ -13,9 +13,9 @@ const RequirementForm = ({ onSubmit, isLoading }) => {
   };
 
   const exampleDescriptions = [
-    "I want an app to manage student courses and grades. Teachers add courses, students enroll, and admins manage reports.",
-    "I need an inventory management system for my store. Track products, suppliers, and generate sales reports.",
-    "Create a task management app for my team. Assign tasks, track progress, and manage deadlines.",
+    "I need a university portal where teachers manage courses and grades, and students enroll and check their results.",
+    "I want a personal finance app to record expenses and income, organize categories, import bank statements, set budgets, and get monthly and yearly summaries.",
+    "Simple procurement flow: employees submit purchase requests, managers approve, and finance records invoices and payments.",
   ];
 
   return (

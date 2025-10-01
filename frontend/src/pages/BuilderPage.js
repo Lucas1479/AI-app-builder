@@ -148,13 +148,10 @@ const BuilderPage = () => {
 
   return (
     <div>
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4">
-          AI App Builder
-        </h1>
-        <p className="text-lg text-gray-600">
+      <div className="text-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-700">
           Describe your app idea and let our AI create a mock interface for you
-        </p>
+        </h1>
       </div>
       
       <RequirementForm 
