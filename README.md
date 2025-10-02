@@ -2,6 +2,8 @@
 
 An AI-powered app prototype generator that transforms natural language descriptions into structured requirements and interactive mock UIs. Users describe their app idea, and the system generates a complete interface with role-based access control, dynamic forms, and navigation.
 
+It's now depolyed by render: https://ai-app-builder-frontend.onrender.com/
+
 - **Tech Stack**: React, Node.js, Express, MongoDB, Google Gemini AI
 - **Deployment**: Local development or cloud hosting (Render recommended)
 
