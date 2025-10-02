@@ -4,12 +4,19 @@ An AI-powered app prototype generator that transforms natural language descripti
 
 It's now depolyed by render: https://ai-app-builder-frontend.onrender.com/
 
+<img width="2139" height="1390" alt="image" src="https://github.com/user-attachments/assets/b6de45cd-6060-4da3-b9c8-cb22919eaffa" />
+
+
 - **Tech Stack**: React, Node.js, Express, MongoDB, Google Gemini AI
 - **Deployment**: Local development or cloud hosting (Render recommended)
 
 ---
 
 ## Features
+<img width="1433" height="1269" alt="image" src="https://github.com/user-attachments/assets/307f9b71-12cc-442f-af95-a1eda0a2c43e" />
+<img width="1936" height="1281" alt="image" src="https://github.com/user-attachments/assets/b543a74b-7023-4d83-a3d3-63390435f030" />
+
+
 
 ### AI-Powered Requirement Analysis
 - Natural language processing to extract structured app requirements
